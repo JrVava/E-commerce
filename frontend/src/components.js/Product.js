@@ -47,7 +47,7 @@ export default function Product() {
                                                     }
 
                                                     <Card.Subtitle className="mb-2 text-muted">${product.price}</Card.Subtitle>
-                                                    <Link to={`../product-details/${product.id}`} className="btn btn-primary">More details</Link>
+                                                    <Link to={`../product-details/${product.uuid}`} className="btn btn-primary">More details</Link>
                                                 </Card.Body>
                                             </Card>
                                         </div>

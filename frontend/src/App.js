@@ -17,11 +17,9 @@ function App() {
           <hr />
           <Routes>
           <Route path="/" element={<Home />} />
-          
-            <Route path="/products" element={<MyContextProvider><Product /></MyContextProvider>} />
-            
             <Route path="/category/:uuid" element={<ProductByCategorySlug />} />
-            <Route path="/product-details/:uuid" element={<ProductDetails />} />
+            <Route path="/products" element={<MyContextProvider><Product /></MyContextProvider>} />
+            <Route path="/product-details/:uuid" element={<MyContextProvider><ProductDetails /></MyContextProvider>} />
           </Routes>
         </BrowserRouter>
         {/* </MyContextProvider> */}

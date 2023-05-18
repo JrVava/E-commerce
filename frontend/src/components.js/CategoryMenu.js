@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import React from 'react';
 import {Nav,NavDropdown } from 'react-bootstrap';
 export default function CategoryMenu  ({ categories }) {
     

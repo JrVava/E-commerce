@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../utils/apis';
-
+import { useParams } from 'react-router-dom';
 const MyContext = React.createContext({});
 
 export const MyContextProvider = ({ children }) => {
@@ -9,15 +9,18 @@ export const MyContextProvider = ({ children }) => {
     const [message, setMessage] = useState("");
     const [result, setResult] = useState([]);
     const [filterFieldsData, setFilterFieldsData] = useState({});
+    const params = useParams();
+    const [data,setData] = useState([]);
 
+    let uuid = params.uuid;
     const getProduct = async () => {
         try {
             await api.get(`products`).then((res) => {
-                if(res.data.product.length > 0){
+                if (res.data.product.length > 0) {
                     setProducts(res.data.product)
                     setResult(res.data.product)
                     setLoading(false)
-                }else{
+                } else {
                     setMessage("Sorry, there are no products")
                 }
             })
@@ -25,6 +28,9 @@ export const MyContextProvider = ({ children }) => {
             console.error('Error fetching data:', error);
         }
     }
+
+ 
+
     const filterHandler = (e) => {
         setFilterFieldsData({
             ...filterFieldsData,
@@ -32,44 +38,27 @@ export const MyContextProvider = ({ children }) => {
         })
     }
     const buttonHandler = () => {
-        console.log(filterFieldsData);
         filterData()
-       
+
     }
-//     const filterData = () => {
-//         setLoading(true)
-//         let data = [];
-//         result.filter((product) => {
-//             if(product.name === filterFieldsData.product){
-//                 product.category.filter((catagory) => {
-//                     if (catagory.uuid === filterFieldsData.category) {
-//                         data.push(product);
-//                     }
-//                 })
-//             }
-//         })
-//         setLoading(false)
-//         setProducts(data)
 
-// };
-const clearFilters = () => {
-    // Reset the 'data' state to its original state (e.g., refetch the data from the API)
-    // console.log("hello");
-    getProduct();
-  };
-const filterData = () => {
-   let answer =  result.filter(item =>
-         
-        (filterFieldsData.product === '' || item.name.includes(filterFieldsData.product)) || (filterFieldsData.price !== '' && item.price.includes(filterFieldsData.price)) || (filterFieldsData.category !== '' && item.category.some(cat => cat.uuid === filterFieldsData.category))
-    )
-    setProducts(answer)
-   console.log(answer);
-};
-
-
+    const clearFilters = () => {
+        getProduct();
+    };
+    const filterData = () => {
+        let answer = result.filter(item =>
+            (filterFieldsData.product === '' || item.name.includes(filterFieldsData.product)) ||
+             (filterFieldsData.price !== '' && item.price.includes(filterFieldsData.price)) ||
+              (filterFieldsData.category !== '' && item.category.some(cat => cat.uuid === filterFieldsData.category))
+        )
+        setProducts(answer)
+        console.log(answer);
+    };
 
     useEffect(() => {
+        
         getProduct()
+        // console.log(uuid);
     }, [loading])
 
     const contextValue = {
@@ -79,7 +68,8 @@ const filterData = () => {
         filterHandler,
         buttonHandler,
         filterFieldsData,
-        clearFilters
+        clearFilters,
+        result
     };
     return (
         <MyContext.Provider value={contextValue}>
