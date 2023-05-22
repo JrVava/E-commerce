@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProductCategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
@@ -16,21 +18,32 @@ use App\Http\Controllers\ProductImageController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('/');
-Route::get('category-tree-view',[CategoryController::class,'manageCategory'])->name('category');
-Route::post('add-category',[CategoryController::class,'addCategory'])->name('add.category');
-Route::post('category/delete',[CategoryController::class,'delete'])->name('category.delete');
+// Auth\LoginController@showLoginForm
+Route::get('login',[LoginController::class,'showLoginForm'])->name('login');
+// Auth\RegisterController@showRegistrationForm
+Route::get('sign-up',[RegisterController::class,'showRegistrationForm'])->name('sign-up');
 
-Route::get('category/edit/{id}',[CategoryController::class,'edit']);
+Route::middleware('admin')->group(function () {
+    Route::get('/', function () {
+        return view('welcome');
+    })->name('/');
+    Route::get('category-tree-view',[CategoryController::class,'manageCategory'])->name('category');
+    Route::post('add-category',[CategoryController::class,'addCategory'])->name('add.category');
+    Route::post('category/delete',[CategoryController::class,'delete'])->name('category.delete');
+    
+    Route::get('category/edit/{id}',[CategoryController::class,'edit']);
+    
+    Route::get('product',[ProductController::class,'index'])->name('product');
+    Route::get('product/create',[ProductController::class,'create'])->name('product.create');
+    Route::post('add-product',[ProductController::class,'store'])->name('add.product');
+    Route::get('product/edit/{uuid}',[ProductController::class,'edit'])->name('product.edit');
+    Route::delete('product/delete/{uuid}',[ProductController::class,'delete'])->name('delete.product');
+    
+    Route::post('upload-product-images',[ProductImageController::class,'store'])->name('upload.product.images');
+    Route::delete('delete/product/image/{uuid}/{productUUID}',[ProductImageController::class,'delete'])->name('delete.product.image');
+    Route::post('add/product/category',[ProductCategoryController::class,"addUpdateCategory"])->name('add.product.category');
+});
 
-Route::get('product',[ProductController::class,'index'])->name('product');
-Route::get('product/create',[ProductController::class,'create'])->name('product.create');
-Route::post('add-product',[ProductController::class,'store'])->name('add.product');
-Route::get('product/edit/{uuid}',[ProductController::class,'edit'])->name('product.edit');
-Route::delete('product/delete/{uuid}',[ProductController::class,'delete'])->name('delete.product');
+Auth::routes();
 
-Route::post('upload-product-images',[ProductImageController::class,'store'])->name('upload.product.images');
-Route::delete('delete/product/image/{uuid}/{productUUID}',[ProductImageController::class,'delete'])->name('delete.product.image');
-Route::post('add/product/category',[ProductCategoryController::class,"addUpdateCategory"])->name('add.product.category');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -14,4 +14,9 @@ class ProductCategory extends Model
         'p_id',
         'cat_id'
     ];
+
+    public function category (){
+        return $this->belongsTo(Category::class,'cat_id','id');
+        // return $this->hasMany(Category::class,'id','cat_id');
+    }
 }

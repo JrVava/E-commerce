@@ -13,7 +13,7 @@ class ProductController extends Controller
     public function index(Request $request){
         if ($request->ajax()) {
             $data = Product::latest()->get();
-            return Datatables::of($data)
+            return \Yajra\DataTables\Facades\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('status', function($row){
                     $status = $row->status == 1 ? "Active" : "Inactive";

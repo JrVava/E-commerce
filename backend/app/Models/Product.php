@@ -26,6 +26,8 @@ class Product extends Model
     }
 
     public function getCategory(){
-        return $this->hasMany(ProductCategory::class, 'p_id', 'id');
+        return $this->hasMany(ProductCategory::class, 'p_id', 'id')->with('category');
+        // return $this->belongsTo(ProductCategory::class, 'id', 'p_id')->with('category');
+        
     }
 }

@@ -12,7 +12,10 @@ class CategoryController extends Controller
         $categories = Category::with('child')->where('parent_id','=',0)->get();
         return response()->json(['categories' => $categories, 'status' => 200]);
     }
-
+    public function list(){
+        $categories = Category::get();
+        return response()->json(['categories' => $categories, 'status' => 200]);
+    }
     public function categoryWithslug($uuid){
         $categories = Category::with(['product'])->where('uuid','=',$uuid)->first();
         $categories->productImage();

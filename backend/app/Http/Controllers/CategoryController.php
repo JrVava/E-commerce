@@ -7,8 +7,13 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('admin');
+    }
     public function manageCategory()
     {
+        // dd('hell');
         $categories = Category::with('countProductLinkWithCategory')->where('parent_id', '=', 0)->get();
         return view('categoryTreeview', compact('categories'));
     }
